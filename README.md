@@ -24,5 +24,6 @@ Welcome to the Terra Celestia ID Maker, a custom ID generator specifically desig
 ## Link
 [Terra Celestia ID Maker](https://yaruchi.github.io/Terra-Celestia-ID/)
 
-##Reminders
-This still have some bugs with other devices, we recomend using PC to download the ID.
+## Reminders
+
+-This still have some bugs with other devices, we recomend using PC to download the ID.
