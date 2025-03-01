@@ -24,14 +24,11 @@
             background: #1b2d1b;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
             width: 95%;
             max-width: 600px;
             text-align: center;
         }
         .id-preview {
-            width: 100%;
-            max-width: 500px;
             aspect-ratio: 16/9;
             background: url('background.png') no-repeat center/cover;
             display: flex;
@@ -50,11 +47,12 @@
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 1.8em;
+            font-size: min(5vw, 25px);
             font-weight: bold;
             color: #2b6639;
             text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
         }
+
         .id-text-section {
             display: flex;
             flex-direction: column;
@@ -62,21 +60,20 @@
             text-align: left;
             flex: 1;
             margin-right: 20px;
-            color: #1a3d1a;
+            color: #5a865a;
         }
         .id-text {
-            font-size: 1.8em;
+            font-size: min(3vw, 20px);
             overflow-wrap: break-word;
             margin-bottom: 10px;
             color: #1a3d1a;
         }
         .highlight {
-            color: #2b6639;
-            font-weight: bold;
+            color: #6baa79;
         }
         .profile-picture {
-            width: 150px;
-            height: 150px;
+            width: min(25vw, 150px);
+            height: min(25vw, 150px);
             background-color: #333;
             display: flex;
             justify-content: center;
@@ -129,7 +126,7 @@
             font-weight: bold;
         }
         .description {
-            font-size: 0.9em;
+            font-size: min(1.5vw, 10px);
             color: #1a3d1a;
             margin-bottom: 5px;
             position: relative;
@@ -141,21 +138,38 @@
             font-family: 'Courier New', Courier, monospace;
             text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
         }
+        .subtittle {
+            font-size: 0.8em;
+            color: 0 0 10px rgba(0, 255, 0, 0.8);
+        }
+        .device-specs {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: min(1vw, 10px);
+            color: #0d3d07; /* Green text */
+            text-align: left;
+        }
+        .device-specs p {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="title">Terra Celestia</h1>
+        <p class="subtittle">The image quality, text, and view are different depending on what device you are using. <br>We recommend using a PC to fill this form in order to have a good-looking ID.</p>
         <div class="id-preview" id="idPreview">
             <div class="id-title">Terra Celestia</div>
             <div class="id-text-section">
-                <div class="id-text" id="previewName">Name: <span class="highlight">__________</span></div>
+                <div class="id-text" id="previewName">Name: </div>
                 <div class="description">Your personal name on the ID.</div>
-                <div class="id-text" id="previewDiscord">Discord: <span class="highlight">__________</span></div>
+                <div class="id-text" id="previewDiscord">Discord: </div>
                 <div class="description">Your Discord username.</div>
-                <div class="id-text" id="previewRegDate">Date: <span class="highlight">__________</span></div>
+                <div class="id-text" id="previewRegDate">Date: </div>
                 <div class="description">The date you registered.</div>
-                <div class="id-text implemented">Signature: <span class="highlight">__________</span></div>
+                <div class="id-text implemented">Signature: </div>
+                <div class="device-specs" id="deviceSpecs"></div>
             </div>
             <div class="profile-picture">
                 <img id="previewProfilePic">
@@ -181,9 +195,9 @@
     </div>
     <script>
         function updatePreview() {
-            const nameValue = document.getElementById('name').value || "__________";
-            const discordValue = document.getElementById('discord').value || "__________";
-            const dateValue = document.getElementById('regDate').value || "__________";
+            const nameValue = document.getElementById('name').value;
+            const discordValue = document.getElementById('discord').value;
+            const dateValue = document.getElementById('regDate').value;
 
             document.getElementById('previewName').innerHTML = `Name: <span class="highlight">${nameValue}</span>`;
             document.getElementById('previewDiscord').innerHTML = `Discord: <span class="highlight">${discordValue}</span>`;
@@ -196,7 +210,7 @@
             preview.style.display = 'block';
         }
 
-       function downloadID() {
+        function downloadID() {
             html2canvas(document.getElementById("idPreview"), {
                 scale: 3, // Increase resolution
                 useCORS: true, // Support external images
@@ -209,6 +223,20 @@
                 link.click();
             });
         }
+
+        function getDeviceSpecs() {
+            const deviceSpecs = document.getElementById('deviceSpecs');
+            const userAgent = navigator.userAgent;
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            deviceSpecs.innerHTML = `
+                <p>Device: ${navigator.platform}</p>
+                <p>Window Size: ${screenWidth} x ${screenHeight}</p>
+            `;
+        }
+
+        getDeviceSpecs();
     </script>
 </body>
 </html>
