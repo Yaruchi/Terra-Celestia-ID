@@ -23,14 +23,12 @@
             margin: 40px auto;
         }
         .title {
-            margin-top: 0;
             font-size: 36px;
             font-weight: bold;
             font-family: "Courier New", Courier, monospace;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         .description {
-            margin: 10px 0 30px;
             font-size: 18px;
             font-family: "Courier New", Courier, monospace;
             line-height: 1.5;
@@ -39,12 +37,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 20px;
         }
         .id-card {
             width: 816px;
             height: 489px;
-            transform-origin: center;
             background: url('background.png') no-repeat center center/cover;
             border: 2px solid rgb(22, 105, 40);
             padding: 10px;
@@ -57,7 +53,6 @@
             padding: 40px;
             font-size: 24px;
             text-align: left;
-            flex-direction: column;
             line-height: 1;
         }
         .text-section h2 {
@@ -101,16 +96,15 @@
             width: 300px;
         }
     </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
     <div class="form-container">
-        <h1 class="title">ID Maker</h1>
+        <h1 class="title">Terra Celestia ID</h1>
         <p class="description">Make your Official ID for Terra Celestia!<br>
-        Just a reminder that the ID will look big for mobile users.<br>We recommend using this site on a PC to view the whole screen.</p>
+        The ID may appear large on mobile devices. We recommend using a PC.</p>
         <div class="container">
             <input type="text" id="name" placeholder="Enter Name">
-            <input type="text" id="idNumber" placeholder="Enter ID Number">
             <input type="file" id="imageInput" accept="image/*">
             <div class="id-card" id="preview">
                 <div class="text-section">
@@ -129,16 +123,28 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         document.getElementById('name').addEventListener('input', function() {
-            document.getElementById('displayName').innerHTML = `Name: ${this.value}<br><small>The Owner of this ID.</small>`;
+            let nameValue = this.value.trim();
+            document.getElementById('displayName').innerHTML = `Name: ${nameValue}<br><small>The Owner of this ID.</small>`;
+            document.getElementById('displayID').innerHTML = `ID: ${generateUniqueID(nameValue)}<br><small>Unique Identification Number.</small>`;
         });
-    
-        document.getElementById('idNumber').addEventListener('input', function() {
-            document.getElementById('displayID').innerHTML = `ID: ${this.value}<br><small>Unique Identification Number.</small>`;
-        });
-    
+
+        function generateUniqueID(name) {
+            if (name === "") return "________";
+
+            let sum = 0;
+            for (let i = 0; i < name.length; i++) {
+                let charCode = name.charCodeAt(i);
+                if (charCode >= 65 && charCode <= 90 || charCode >= 97 && charCode <= 122) {
+                    sum += (charCode % 32); // Convert A=1, B=2, ..., Z=26
+                }
+            }
+
+            let uniqueID = (sum * 54321) % 1000000; // Multiplication and modulo for a 6-digit ID
+            return uniqueID.toString().padStart(6, '0'); // Ensures 6 digits
+        }
+
         document.getElementById('imageInput').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -149,7 +155,7 @@
                 reader.readAsDataURL(file);
             }
         });
-    
+
         document.addEventListener('DOMContentLoaded', function() {
             let today = new Date();
             let formattedDate = ('0' + today.getDate()).slice(-2) + '/' + ('0' + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear();
@@ -159,28 +165,26 @@
             let seconds = today.getSeconds().toString().padStart(2, '0');
             let ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12 || 12; // Convert to 12-hour format
-    
+
             let formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
             
             document.getElementById('displayDate').textContent = 'Date Registered: ' + formattedDate;
             document.getElementById('displayTime').textContent = 'Time Registered: ' + formattedTime;
         });
-    
+
         function downloadID() {
-    let idCard = document.getElementById('preview');
+            let idCard = document.getElementById('preview');
 
-    html2canvas(idCard, {
-        backgroundColor: null, // Ensures transparency
-        useCORS: true // Fixes background loading issues
-    }).then(canvas => {
-        let link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png', 1.0);
-        link.download = 'ID_Card.png';
-        link.click();
-    });
-}
-
+            html2canvas(idCard, {
+                backgroundColor: null, // Ensures transparency
+                useCORS: true // Fixes background loading issues
+            }).then(canvas => {
+                let link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.download = 'ID_Card.png';
+                link.click();
+            });
+        }
     </script>
-    
 </body>
 </html>
